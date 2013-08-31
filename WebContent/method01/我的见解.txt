@@ -1,0 +1,3 @@
+使用SWFupload工具上传时不能将上传文本框的name属性值设置为upload，否则服务端无法捕捉到客户端交的文本流。
+
+使用SWFupload工具上传时,actionName的名称不能为imageUpload，否则无法访问这个action，改为imageUploadAction就可访问

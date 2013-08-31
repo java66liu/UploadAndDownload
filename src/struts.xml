@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<!-- struts为配置文件根元素-->
+<struts>
+	<constant name="struts.multipart.saveDir" value="/tmp"></constant>
+	
+	<package name="simpleDownload" extends="struts-default" namespace="/simpleDownload">
+		<action name="downloadAction" class="net.hncu.fileDownload.SimpleDownloadAction">
+			<result name="success" type="stream">				
+				<param name="contentType">application/vnd.ms-powerpoint</param>
+				<param name="contentDisposition">filename="${downloadFileName}"</param>
+				<param name="inputName">download</param>
+				<param name="bufferSize">4096</param>				
+			</result>
+		</action>	
+	</package>
+
+	<package name="strictDownload" extends="struts-default" namespace="/strictDownload">
+		<action name="downloadAction_*" class="net.hncu.fileDownload.FileDownloadAction" method="{1}">
+			<result name="inDownloadPage">download.jsp</result>
+			<result name="error">error.jsp</result>
+			<result name="download" type="stream">
+			  <param name="contentType">"${downloadContentType}"</param>
+			  <param name="inputName">inputStream</param>
+			  <param name="bufferSize">4096</param>
+			  <param name="contentDisposition">attachment;filename="${downloadFileName}"</param>
+			</result>
+		</action>
+	</package>
+	
+	<package name="strictDownload2" extends="struts-default" namespace="/strictDownload2">
+		<action name="downloadAction2_*" class="net.hncu.fileDownload.FileDownloadAction2" method="{1}">
+			<result name="inDownloadPage">download.jsp</result>
+			<result name="error">error.jsp</result>
+			<result name="download" type="stream">
+			  <param name="contentType">"${myFileContentType}"</param>
+			  <param name="inputName">inputStream</param>
+			  <param name="bufferSize">4096</param>
+			  <param name="contentDisposition">attachment;filename="${myFileFileName}.txt"</param>
+			</result>
+		</action>
+	</package>
+	
+	<package name="struts2" extends="struts-default" namespace="/">
+		<action name="imageUploadAction" class="net.hncu.image.ImageUploadAction">
+			<result name="success">/imageUpload/success.jsp</result>
+		</action>
+		
+		<action name="imageUploadAction2" class="net.hncu.image.ImageUploadAction2">
+			<result name="success">/imageUpload/success.jsp</result>
+		</action>				
+	
+        <action name ="singleUpload" class ="net.hncu.fileUpload.SingleFileUploadAction">
+           <!-- 动态设置Action中的savePath属性的值 -->
+            <param name="savePath">/upload2</param>
+            <result name ="success">/otherUpload/singleUploadResult.jsp</result>
+        </action >
+
+		<action name="multiUpload" class="net.hncu.fileUpload.MultiFileUploadAction">
+			<param name="savePath">/upload2</param>
+			
+			<!-- 定义处理结果与视图资源之间的关系-->
+			<result name="success">/otherUpload/multiUploadResult.jsp</result>
+			<result name="input">/otherUpload/multiUpload.jsp</result>
+			
+		</action>
+
+		<action name="multiUpload3" class="net.hncu.fileUpload.rubbish.MultiFileUploadAction3">
+			<param name="savePath">/upload2</param>
+			
+			<!-- 定义处理结果与视图资源之间的关系-->
+			<result name="success">/otherUpload/multiUpload3Result.jsp</result>
+			<result name="input">/otherUpload/multiUpload3.jsp </result>
+			
+			<!-- 配置fileUpload拦截器 -->
+			<interceptor-ref name="fileUpload">
+				<!-- 配置允许上传文件类型 -->
+				<param name="allowedTypes">image/bmp,image/jpeg,image/png</param>
+				<!-- 配置允许上传文件大小最大值 -->
+				<param name="maximumSize">2048000</param>
+			</interceptor-ref>
+			
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		
+	</package>
+	
+	<package name="shrinkImage" namespace="/shrinkImage" extends="struts-default">
+		<action name="generSmallImageAction" class="net.hncu.image.GenerSmallImageAction">
+          <result name="success">/shrinkImage/index1.jsp</result>		
+		</action>
+	</package>
+</struts>
+
